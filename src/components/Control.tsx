@@ -20,7 +20,7 @@ export type ControlProps = {
 
 export default function Control({ type, bases, setBases, value, setValue }: ControlProps) {
 	type = type === Type.Input ? Type.Input : Type.Output;
-	const base = () => `${bases()[type === Type.Input ? 0 : 1]}`;
+	const base = () => bases()[type === Type.Input ? 0 : 1];
 
 	const computedValue = () => {
 		if (type === Type.Input) return value();
@@ -32,12 +32,12 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 	return (
 		<div class="flex flex-col items-center gap-2 rounded bg-gray-200 p-4">
 			<div class="flex items-center gap-2">
-				<label for={base()}>Base</label>
+				<label for={`${base()}`}>Base</label>
 				<select
-					id={base()}
-					name={base()}
+					id={`${base()}`}
+					name={`${base()}`}
 					class="rounded"
-					value={bases()[type === Type.Input ? 0 : 1]}
+					value={base()}
 					onInput={e => {
 						const base = parseInt((e.target as HTMLSelectElement).value);
 						setBases([type === Type.Input ? base : bases()[0], type === Type.Output ? base : bases()[1]]);
@@ -48,16 +48,19 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 					))}
 				</select>
 			</div>
-			<input
-				type="text"
-				id={Type[type]}
-				name={Type[type]}
-				pattern={REGEX[bases()[type === Type.Input ? 0 : 1] - 2]}
-				class="rounded"
-				value={computedValue()}
-				onInput={e => setValue((e.target as HTMLInputElement).value)}
-				readOnly={type === Type.Output}
-			/>
+			<div class="flex items-center gap-2">
+				<label for={Type[type]}>{type === Type.Input ? "Input" : "Output"}</label>
+				<input
+					type="text"
+					id={Type[type]}
+					name={Type[type]}
+					pattern={REGEX[base() - 2]}
+					class="rounded"
+					value={computedValue()}
+					onInput={e => setValue((e.target as HTMLInputElement).value)}
+					readOnly={type === Type.Output}
+				/>
+			</div>
 		</div>
 	);
 }

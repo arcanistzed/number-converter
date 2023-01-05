@@ -59,7 +59,7 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 					id={Type[type]}
 					name={Type[type]}
 					pattern={REGEX[base() - 1]}
-					class="rounded"
+					class="rounded px-1"
 					value={computedValue()}
 					onInput={e => setValue((e.target as HTMLInputElement).value)}
 					readOnly={type === Type.Output}

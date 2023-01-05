@@ -1,4 +1,4 @@
-const BASES = Array.from({ length: 35 }, (_, i) => i).map(i => i + 2);
+const BASES = Array.from({ length: 36 }, (_, i) => i).map(i => i + 1);
 
 const REGEX = BASES.map(i => {
 	const chars = "0123456789abcdefghijklmnopqrstuvwxyz".slice(0, i);
@@ -24,6 +24,10 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 
 	const computedValue = () => {
 		if (type === Type.Input) return value();
+		if (bases()[0] === bases()[1]) return value();
+		// Handle base-1
+		if (bases()[0] === 1) return value().length.toString(bases()[1]);
+		if (bases()[1] === 1) return "1".repeat(parseInt(value(), bases()[0]));
 		const num = parseInt(value(), bases()[0]);
 		if (Number.isNaN(num)) return "";
 		return num.toString(bases()[1]);
@@ -43,8 +47,8 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 						setBases([type === Type.Input ? base : bases()[0], type === Type.Output ? base : bases()[1]]);
 					}}
 				>
-					{REGEX.map((_, i) => (
-						<option value={i + 2}>{i + 2}</option>
+					{BASES.map(i => (
+						<option value={i}>{i}</option>
 					))}
 				</select>
 			</div>
@@ -54,7 +58,7 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 					type="text"
 					id={Type[type]}
 					name={Type[type]}
-					pattern={REGEX[base() - 2]}
+					pattern={REGEX[base() - 1]}
 					class="rounded"
 					value={computedValue()}
 					onInput={e => setValue((e.target as HTMLInputElement).value)}

@@ -23,13 +23,17 @@ export default function Control({ type, bases, setBases, value, setValue }: Cont
 	const base = () => bases()[type];
 
 	const computedValue = () => {
+		// Only compute output
 		if (type === Type.Input) return value();
 		if (bases()[0] === bases()[1]) return value();
 		// Handle base-1
 		if (bases()[0] === 1) return value().length.toString(bases()[1]);
 		if (bases()[1] === 1) return "1".repeat(parseInt(value(), bases()[0]));
+		// Parse input
 		const num = parseInt(value(), bases()[0]);
+		// Handle invalid input
 		if (Number.isNaN(num)) return "";
+		// Convert to output base
 		return num.toString(bases()[1]);
 	};
 

@@ -20,7 +20,7 @@ export type ControlProps = {
 
 export default function Control({ type, bases, setBases, value, setValue }: ControlProps) {
 	type = type === Type.Input ? Type.Input : Type.Output;
-	const base = () => bases()[type === Type.Input ? 0 : 1];
+	const base = () => bases()[type];
 
 	const computedValue = () => {
 		if (type === Type.Input) return value();
